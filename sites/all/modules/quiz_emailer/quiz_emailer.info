@@ -1,0 +1,8 @@
+﻿; $Id: um_hooks.info,v 1.1 2012/10 19:57:41 mrschlei Exp $
+name = Quiz Email hooks
+description = This emails results to users, not just links to results.
+core = 7.x
+
+dependencies[] = quiz
+
+files[] = quiz_emailer.module

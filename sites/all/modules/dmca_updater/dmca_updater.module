@@ -1,0 +1,58 @@
+<?php
+function dmca_updater_quiz_finished($quiz, $score, $session_data) {
+  // ;_; load all the dmcad_users, check if they're the logged in user (if the user is logged in) and then update those nodes, if needed
+  //:o
+  //11/28 - added a :o guy drinking the ;_; guy's tears
+  //03/15 - lots of quizzes doing different things, so adding some specificity... 'n stuff
+  
+	if (user_is_logged_in()) {
+		global $user;
+		$username = $user->name;
+		//yes, the nid is a string here, not an int
+		//2597 is the copyright compliance quiz in dev AND prod #DBsync4dev4lyfe #DBsinks #MaybeDevAndProdShouldntBeSyncedSoCloselyImNot100PercentSure
+		if ($quiz->nid == '2597') {
+  			
+  			$type = "dmcad_user"; 
+			//load all content of type "dmcad_user"
+  			$nodes = node_load_multiple(array(), array('type' => $type)); 
+  			$thisjunk = array();
+
+  			foreach($nodes as $issue) {
+	  			//our people are a generous people - update any/all items found with the logged in user's uniqname
+				if ($score["passing"] == 0 && $issue->title == $username) {
+
+					$issue->field_taken_quiz_yet_['und'][0]['value'] = "Yes";
+					node_save($issue);
+					watchdog('DMCA Update log', "PASSED: Updated DMCA user: <a href='https://www.safecomputing.umich.edu/node/".$issue->nid."'>https://www.safecomputing.umich.edu/node/".$issue->nid."</a> ", array(), WATCHDOG_DEBUG);
+				}
+				elseif ($score["passing"] == 1 && $issue->title == $username) {
+					watchdog('DMCA Update log', "Quiz failed - no update (".$username.")", array(), WATCHDOG_DEBUG);
+				}
+  			}
+		}
+		//2308 is Computer Security 101 Exam 2015 in dev and prod
+		elseif ($quiz->nid == '2308') {
+			markthisdone('2308',$username);			
+		}
+	}
+	else {
+		watchdog('DMCA Update log', "Finished Quiz user was anony-mouse.", array(), WATCHDOG_DEBUG);
+	}
+}
+
+
+function markthisdone ($nodeid, $userid) {
+	
+	//security_homework_completion option keys == node ids for completed stuff
+	//***************NOTE THE security_homework_completion HERE!!!!!***************
+	$exists = db_query('SELECT * FROM {node} WHERE type = :type AND title = :title', array(':type' => 'security_homework_completion',':title' => $userid))->fetchField();
+	if ($exists == FALSE){
+		// returns TRUE is there is a record.
+		// make a new homework entry and mark 2308 as done
+		watchdog('DMCA Update log', "I'd create a new record here.", array(), WATCHDOG_DEBUG);
+	}
+	else {
+		//just update the existing record	
+		watchdog('DMCA Update log', "I'd update the record here.", array(), WATCHDOG_DEBUG);
+	}
+}

@@ -1,0 +1,204 @@
+<?php
+
+
+/**
+ * Implements hook_node_insert().
+ */
+function quiz_emailer_quiz_finished($quiz, $score, $session_data) {
+
+$rid = $session_data['result_id'];
+
+
+//var_dump($score);
+//array(6) { ["question_count"]=> int(11) ["possible_score"]=> float(10) ["numeric_score"]=> float(7) ["percentage_score"]=> float(70) ["is_evaluated"]=> int(1) ["passing"]=> bool(false) }
+
+if (isset($quiz->title) && $quiz->nid == "2308") {
+//$taker->mail
+	//drupal_mail('quiz_emailer', 'notice', "mrschlei@umich.edu", NULL, array($quiz, $score, $rid, 'taker'));
+
+}
+
+//var_dump($quiz);
+//object(stdClass)#112 (57) { 
+//["vid"]=> string(4) "3481" 
+//["uid"]=> string(1) "1" 
+//["title"]=> string(26) "Computer Security 101 Exam" 
+//["log"]=> string(125) "The current revision has been answered. We create a new revision so that the reports from the existing answers stays correct." 
+//["status"]=> string(1) "1" 
+//["comment"]=> string(1) "1" 
+//["promote"]=> string(1) "0" 
+//["sticky"]=> string(1) "0" 
+//["nid"]=> string(4) "2308" ["type"]=> string(4) "quiz" ["language"]=> string(3) "und" ["created"]=> string(10) "1473363557" ["changed"]=> string(10) "1476119479" ["tnid"]=> string(1) "0" ["translate"]=> string(1) "0" ["revision_timestamp"]=> string(10) "1476119479" ["revision_uid"]=> string(1) "1" ["aid"]=> string(16) "node_save_action" ["number_of_random_questions"]=> string(1) "0" ["max_score_for_random"]=> string(1) "1" ["pass_rate"]=> string(2) "75" ["summary_pass"]=> string(0) "" ["summary_pass_format"]=> string(10) "plain_text" ["summary_default"]=> string(0) "" ["summary_default_format"]=> string(10) "plain_text" ["randomization"]=> string(1) "0" ["backwards_navigation"]=> string(1) "1" ["repeat_until_correct"]=> string(1) "0" ["feedback_time"]=> string(1) "1" ["display_feedback"]=> string(1) "1" ["quiz_open"]=> string(10) "1477440000" ["quiz_close"]=> string(10) "1477785600" ["takes"]=> string(1) "0" ["show_attempt_stats"]=> string(1) "1" ["keep_results"]=> string(1) "0" ["time_limit"]=> string(1) "0" ["quiz_always"]=> string(1) "0" ["tid"]=> string(1) "0" ["has_userpoints"]=> string(1) "0" ["userpoints_tid"]=> string(1) "0" ["allow_skipping"]=> string(1) "0" ["allow_resume"]=> string(1) "0" ["allow_jumping"]=> string(1) "0" ["show_passed"]=> string(1) "0" ["mark_doubtful"]=> string(1) "0" ["max_score"]=> string(2) "10" ["body"]=> array(1) { ["und"]=> array(1) { [0]=> array(5) { ["value"]=> string(2405) "big long description removed - it was in quotes - don't worry about it" ["safe_summary"]=> string(0) "" } } } ["rdf_mapping"]=> array(9) { ["rdftype"]=> array(2) { [0]=> string(9) "sioc:Item" [1]=> string(13) "foaf:Document" } ["title"]=> array(1) { ["predicates"]=> array(1) { [0]=> string(8) "dc:title" } } ["created"]=> array(3) { ["predicates"]=> array(2) { [0]=> string(7) "dc:date" [1]=> string(10) "dc:created" } ["datatype"]=> string(12) "xsd:dateTime" ["callback"]=> string(12) "date_iso8601" } ["changed"]=> array(3) { ["predicates"]=> array(1) { [0]=> string(11) "dc:modified" } ["datatype"]=> string(12) "xsd:dateTime" ["callback"]=> string(12) "date_iso8601" } ["body"]=> array(1) { ["predicates"]=> array(1) { [0]=> string(15) "content:encoded" } } ["uid"]=> array(2) { ["predicates"]=> array(1) { [0]=> string(16) "sioc:has_creator" } ["type"]=> string(3) "rel" } ["name"]=> array(1) { ["predicates"]=> array(1) { [0]=> string(9) "foaf:name" } } ["comment_count"]=> array(2) { ["predicates"]=> array(1) { [0]=> string(16) "sioc:num_replies" } ["datatype"]=> string(11) "xsd:integer" } ["last_activity"]=> array(3) { ["predicates"]=> array(1) { [0]=> string(23) "sioc:last_activity_date" } ["datatype"]=> string(12) "xsd:dateTime" ["callback"]=> string(12) "date_iso8601" } } ["path"]=> array(1) { ["pathauto"]=> string(1) "0" } ["cid"]=> string(1) "0" ["last_comment_timestamp"]=> string(10) "1473363557" ["last_comment_name"]=> NULL ["last_comment_uid"]=> string(1) "1" ["comment_count"]=> string(1) "0" ["name"]=> string(8) "mrschlei" ["picture"]=> string(1) "0" ["data"]=> string(200) "a:6:{s:16:"ckeditor_default";s:1:"t";s:20:"ckeditor_show_toggle";s:1:"t";s:14:"ckeditor_width";s:4:"100%";s:13:"ckeditor_lang";s:2:"en";s:18:"ckeditor_auto_lang";s:1:"t";s:17:"mimemail_textonly";i:0;}" 	
+	
+	
+	
+	
+//var_dump($session_data);
+//array(6) { ["result_id"]=> string(1) "5" ["quiz_questions"]=> array(0) { } ["previous_quiz_questions"]=> array(11) { 
+//[0]=> array(5) { ["nid"]=> string(4) "2309" ["vid"]=> string(4) "3099" ["relative_max_score"]=> string(1) "1" ["number"]=> int(1) ["rid"]=> string(1) "5" } 
+//[1]=> array(5) { ["nid"]=> string(4) "2311" ["vid"]=> string(4) "2984" ["relative_max_score"]=> string(1) "1" ["number"]=> int(2) ["rid"]=> string(1) "5" } 
+//[2]=> array(5) { ["nid"]=> string(4) "2315" ["vid"]=> string(4) "2978" ["relative_max_score"]=> string(1) "1" ["number"]=> int(3) ["rid"]=> string(1) "5" } 
+//[3]=> array(5) { ["nid"]=> string(4) "2317" ["vid"]=> string(4) "2981" ["relative_max_score"]=> string(1) "1" ["number"]=> int(4) ["rid"]=> string(1) "5" } 
+//[4]=> array(5) { ["nid"]=> string(4) "2318" ["vid"]=> string(4) "2967" ["relative_max_score"]=> string(1) "1" ["number"]=> int(5) ["rid"]=> string(1) "5" } 
+//[5]=> array(5) { ["nid"]=> string(4) "2319" ["vid"]=> string(4) "2969" ["relative_max_score"]=> string(1) "1" ["number"]=> int(6) ["rid"]=> string(1) "5" } 
+//[6]=> array(5) { ["nid"]=> string(4) "2320" ["vid"]=> string(4) "2970" ["relative_max_score"]=> string(1) "1" ["number"]=> int(7) ["rid"]=> string(1) "5" } 
+//[7]=> array(5) { ["nid"]=> string(4) "2321" ["vid"]=> string(4) "2971" ["relative_max_score"]=> string(1) "1" ["number"]=> int(8) ["rid"]=> string(1) "5" } 
+//[8]=> array(5) { ["nid"]=> string(4) "2322" ["vid"]=> string(4) "2972" ["relative_max_score"]=> string(1) "1" ["number"]=> int(9) ["rid"]=> string(1) "5" } 
+//[9]=> array(5) { ["nid"]=> string(4) "2323" ["vid"]=> string(4) "2973" ["relative_max_score"]=> string(1) "1" ["number"]=> int(10) ["rid"]=> string(1) "5" } 
+//[10]=> array(5) { ["nid"]=> string(4) "2324" ["vid"]=> string(4) "2976" ["relative_max_score"]=> string(1) "0" ["number"]=> int(11) ["rid"]=> string(1) "5" } } 
+//["question_number"]=> int(0) ["question_start_time"]=> int(1476119410) ["quiz_vid"]=> string(4) "3478" }
+}
+
+
+
+/**
+ * Implements hook_mail().
+ */
+function quiz_emailer_mail($key, &$message, $params) {
+  global $user;
+
+  if ($key == 'notice') {
+      list($quiz, $score, $rid, $target) = $params;
+      $quiz_body = field_get_items('node', $quiz, 'body');
+      $substitutions = array(
+        '!title' => $quiz->title,
+        '!sitename' => variable_get('site_name', 'Quiz'),
+        '!taker' => $user->name,
+        '!author' => $quiz->name,
+        '!title' => check_plain($quiz->title),
+        '!date' => format_date(REQUEST_TIME),
+        '!desc' => $quiz_body ? $quiz_body[0]['value'] : '',
+        '!correct' => isset($score['numeric_score']) ? $score['numeric_score'] : 0,
+        '!total' => $score['possible_score'],
+        '!percentage' => $score['percentage_score'],
+        '!url' => url('user/quiz/' . $rid . '/userresults', array('absolute' => TRUE)),
+        '!minutes' => db_query("SELECT CEIL((time_end - time_start)/60) FROM {quiz_node_results} WHERE result_id = :result_id AND time_end", array(':result_id' => $rid))->fetchField()
+      );
+      $type = $target != 'author' ? '_taker' : '';
+      $test = variable_get('quiz_email_results_body' . $type, quiz_email_results_format('body', $target));
+      $message['subject'] = "Thanks for taking ".$quiz->title;
+	  //t(variable_get('quiz_email_results_subject' . $type, quiz_email_results_format('subject', $target)), $substitutions, array('langcode' => $user->language));
+	  //echo "<p>rid: ";
+	  //var_dump($rid);
+	  
+	  //echo "<p>results: ";
+	  //var_dump(quiz_user_results($rid));
+
+	  $questions = _quiz_get_answers($quiz, $rid);
+	  
+	  //echo "<p>Qs: ";
+	  //var_dump($questions);
+	  
+      $message['body'][] = "<p>This is just a <strong>notice test</strong> - please ignore.</p>";
+	  //t($test, $substitutions, array('langcode' => $user->language));
+    }
+	if ($key == 'miktest') {	
+		if (isset($params)) {
+		ob_start();
+		var_dump($params);
+		$unkn = ob_get_clean();}
+		else {$unkn = "no unkn";}
+		$message['subject'] = "well, just a test"; 
+		$message['body'][] = "<p>This is just a <strong>miketest</strong> - please ignore...</p>".$unkn;
+  	}
+}
+
+
+
+//STOLEN!! from /sites/all/modules/quiz/quiz.module
+function _quiz_emailer_get_answers($quiz, $rid) {
+  $questions = array();
+  $ids = db_query("SELECT question_nid, question_vid, type, rs.max_score, qt.max_score as term_max_score
+                   FROM {quiz_node_results_answers} ra
+                   LEFT JOIN {node} n ON (ra.question_nid = n.nid)
+                   LEFT JOIN {quiz_node_results} r ON (ra.result_id = r.result_id)
+                   LEFT OUTER JOIN {quiz_node_relationship} rs ON (ra.question_vid = rs.child_vid) AND rs.parent_vid = r.vid
+                   LEFT OUTER JOIN {quiz_terms} qt ON (qt.vid = :vid AND qt.tid = ra.tid)
+                   WHERE ra.result_id = :rid
+                   ORDER BY ra.number, ra.answer_timestamp", array(':vid' => $quiz->vid, ':rid' => $rid));
+  while ($line = $ids->fetch()) {
+    // Questions picked from term id's won't be found in the quiz_node_relationship table
+	echo "<hr />";
+	var_dump($line);
+    if ($line->max_score === NULL) {
+      if ($quiz->randomization == 2 && isset($quiz->tid) && $quiz->tid > 0) {
+        $line->max_score = $quiz->max_score_for_random;
+      }
+      elseif ($quiz->randomization == 3) {
+        $line->max_score = $line->term_max_score;
+      }
+    }
+    $module = quiz_emailer_question_module_for_type($line->type);
+    if (!$module) {
+      continue;
+    }
+    // Invoke hook_get_report().
+    $report = module_invoke($module, 'get_report', $line->question_nid, $line->question_vid, $rid);
+    if (!$report) {
+      continue;
+    }
+    $questions[$line->question_nid] = $report;
+    // Add max score info to the question.
+    //removed max score jazz - 10/11/2016
+	//if (!isset($questions[$line->question_nid]->score_weight)) {
+     // if ($questions[$line->question_nid]->max_score == 0) {
+        //$score_weight = 0;
+      //}
+      //else {
+       // $score_weight = $line->max_score / $questions[$line->question_nid]->max_score;
+      //}
+      //$questions[$line->question_nid]->qnr_max_score = $line->max_score;
+      //$questions[$line->question_nid]->score_weight = $score_weight;
+    //}
+  }
+  return $questions;
+}
+
+
+
+
+/**
+ * @param $type
+ *
+ * @return string
+ *   Name of module matching the question type, as given by quiz_question_info()
+ *   hook.
+ */
+//STOLEN!! from /sites/all/modules/quiz/quiz.module
+function quiz_emailer_question_module_for_type($type) {
+  $types = _quiz_emailer_get_question_types();
+  if (!isset($types[$type])) {
+    drupal_set_message(t('The module for the questiontype %type is not enabled', array('%type' => $type)), 'warning');
+    return FALSE;
+  }
+  return $types[$type]['module'];
+}
+
+
+
+/**
+ * Retrieve list of question types.
+ *
+ * @return
+ *  Array of question types.
+ */
+function _quiz_emailer_get_question_types() {
+  static $to_return = array();
+
+  // We vastly improves performance by statically caching the question types.
+  if (!empty($to_return)) {
+    return $to_return;
+  }
+
+  // Get question types from the modules that defines them..
+  $quiz_questions = module_invoke_all('quiz_question_info');
+  if (empty($quiz_questions)) {
+    drupal_set_message(t('You need to install and enable at least one question type(multichoice for instance) to use quiz.'), 'warning', FALSE);
+    return array();
+  }
+  else {
+    drupal_alter('quiz_question_info', $quiz_questions);
+  }
+
+  return $quiz_questions;
+}

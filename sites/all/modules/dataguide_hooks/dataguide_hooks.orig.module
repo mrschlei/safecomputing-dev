@@ -1,0 +1,7 @@
+﻿<?php
+
+
+function dataguide_hooks_menu_alter(&$item) {
+  // Hide the "Create new account" tab
+  $item['user/register']['type'] = MENU_CALLBACK;
+}

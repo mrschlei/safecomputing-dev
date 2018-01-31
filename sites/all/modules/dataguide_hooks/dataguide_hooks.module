@@ -1,0 +1,313 @@
+<?php
+
+
+//function dataguide_hooks_form_alter(&$form, &$form_state, $form_id) {
+//mrschlei - 10.22.2012
+//attaching the add_service_to_sens_data function (in this module - below) to the submit actions...
+	//if ($form_id == 'service_node_form') {
+	//	$form["#submit"][] = "add_service_to_sens_data";	
+	//}  
+
+//end form_alter
+//}
+
+
+
+/**
+ * Implements hook_node_insert().
+ */
+function dataguide_hooks_node_insert ($node) {
+
+	if ($node->type == "service") {
+		
+		$title = $node->title;
+		$service = $title;
+		$nid = $node->nid;
+		//0 = no, 1 = yes
+		$published = $node->status;
+		
+		//this code is replicated elsewhere in this file... should probably be a function....
+		//$fieldname = strtolower($title);
+		//$fieldname = preg_replace("/[^a-zA-Z 0-9]+/", " ", $fieldname);
+		//$fieldname = str_replace(" ", "_", $fieldname);
+		
+		//why not just use the nid, man?
+		$fieldname = "prog_".$nid;
+	
+	
+		if (strlen($fieldname) > 30) {
+			$fieldname = substr($fieldname, 0, 29);
+		}
+		
+		//write title, fieldname, and nid to db for later reference		
+		//db_insert('service_info')->fields(array('nid' => $nid,'fieldname' => $fieldname,'title' => $title))->execute();
+
+		//email Mike....
+		//ob_start();
+		//var_dump($node);
+		//$body = ob_get_clean();
+
+		//$body = wordwrap($body,900, "\n");
+		//mail("mrschlei@umich.edu","insert test",$body);
+		//mail("mrschlei@umich.edu","insert test","insert test");
+
+	if ($published === 1) {
+		create_a_field($title, $fieldname);
+		dataguide_hooks_reorder_services_group();
+		watchdog('Add Service to Sens Data Log', $title." added.", array(), WATCHDOG_DEBUG);		
+	}		
+				
+		
+	}	
+
+}
+
+
+
+
+
+
+/**
+ * Implements hook_node_update().
+ */
+function dataguide_hooks_node_update ($node) {
+	if ($node->type == "service") {
+		$title = $node->title;
+		$nid = $node->nid;
+		$is_published = $node->status;
+		$fieldname = "prog_".$nid;
+
+		//update the middle man DB with the new title, for consistency
+		//db_update('service_info')->fields(array('title' => $title))->condition('nid', $nid, '=')->execute();
+		
+		//update the field label with the new title
+	//$quickquery = db_query("SELECT * FROM {service_info} WHERE `nid` = :nid LIMIT 1", array(':nid' => $nid));			
+	//foreach ($quickquery as $record) {
+		//$fieldname = $record->fieldname;	
+	//}
+
+      $instance = field_read_instance("node", $fieldname, 'sensitive_data');
+		//if we need to update a field name
+		if ($instance && $is_published === 1) {
+			$instance['label'] = $title;
+			field_update_instance($instance);		
+		}
+		//if we need to add a field name
+		else if (!$instance && $is_published === 1) {
+			watchdog('Following Node Update Log', "Adding ", array(), WATCHDOG_DEBUG);
+			create_a_field($title, $fieldname);
+			dataguide_hooks_reorder_services_group();
+			//watchdog('Add Service to Sens Data Log', $title." added.", array(), WATCHDOG_DEBUG);  
+		}
+		//if we're unpublishing, we need to kill de field
+		else if ($instance && $is_published === 0) {
+			if (field_info_field($fieldname)) {
+				//remove field from the Service Data content type:
+				watchdog('Following Node Update Log', "Found that field instance - deleting now.", array(), WATCHDOG_DEBUG);
+				field_delete_field($fieldname);
+			}	
+			else {
+				watchdog('Following Node Update Log', "No field instance found.", array(), WATCHDOG_DEBUG);	
+			}			
+		}
+	
+}//end if ($node->type == "service")
+}//end function
+
+
+
+
+/**
+ * Implements hook_node_delete().
+ */
+function dataguide_hooks_node_delete ($node) {
+
+	if ($node->type == "service") {
+	//mail("mrschlei@umich.edu","pre-delete object",serialize($node));
+	$nid = $node->nid;
+	//$quickquery = db_query("SELECT * FROM {service_info} WHERE `nid` = :nid LIMIT 1", array(':nid' => $nid));
+	$fieldname = "prog_".$nid;
+		//foreach ($quickquery as $record) {
+			//mail("mrschlei@umich.edu","SQL query",serialize($record));
+			//$fieldname = $record->fieldname;
+		//}
+
+		$myField_name = $fieldname;
+		
+		if (field_info_field($myField_name)) {
+			//remove field from the Service Data content type:
+			watchdog('Following Node Delete Log', "Found that field instance - deleting now.", array(), WATCHDOG_DEBUG);
+			field_delete_field($myField_name);
+		}	
+		else {
+			watchdog('Following Node Delete Log', "No field instance found.", array(), WATCHDOG_DEBUG);	
+		}
+		
+		//delete {service_info} row for that node
+		//db_delete('service_info')->condition('nid', $nid)->execute();	
+	}
+}
+
+
+
+
+
+//added by mrschlei 10/24/2012
+//When Service form submit (see reference to this function above), look up all 'service' content types,
+//get the titles, create fields for them, add them to a pre-defined group, and sort them.
+//Fields are removed from the group on Service deletion - see dataguide_hooks_node_delete.
+function add_service_to_sens_data($form, &$form_state) {
+
+$service = $form['title']['#value'];
+
+
+		//email Mike....
+		//ob_start();
+		//var_dump($form_state);
+		$body = print_r($form_state,true);
+
+		$body = wordwrap($body,900, "\n");
+		mail("mrschlei@umich.edu","more field testing",$body);
+
+
+$nid = $form_state['nid'];		
+//mail("mrschlei@umich.edu","more field testing","testin: ".$nid);
+
+
+
+
+
+//I heard you like arrays, so I put arrays in your arrays are more arrayed:
+$is_published = $form["additional_settings"]['group']["#groups"]["additional_settings"][2]["status"]["#value"];
+
+//ob_start();
+//var_dump($form);
+//$body = ob_get_clean();
+
+//$body = wordwrap($body,900, "\n");
+//mail("mrschlei@umich.edu","some field data",$is_published);
+
+
+	if ($is_published === 1) {
+		create_a_field($service, "prog_".$nid);
+		dataguide_hooks_reorder_services_group();
+		watchdog('Add Service to Sens Data Log', $service." added.", array(), WATCHDOG_DEBUG);		
+	}
+}
+
+
+//also not a hook - added to pull out the field creation logic
+function create_a_field ($service,$fieldname) {
+
+	//make the titles into proper field names
+	//this code is duplicated above, so changes must be made in tandem - i should write a function for this, probably.
+	//$fieldname = strtolower($service);
+	//$fieldname = preg_replace("/[^a-zA-Z 0-9]+/", " ", $fieldname);
+	//$fieldname = str_replace(" ", "_", $fieldname);
+	//$fieldname = "prog_".$nid;
+	//if (strlen($fieldname) > 30) {
+		//$fieldname = substr($fieldname, 0, 29);
+	//}
+
+    $myField_name = $fieldname;
+	
+	//mail("mrschlei@umich.edu","create a field test",$myField_name);
+	
+	
+    if(!field_info_field($myField_name)) // check if the field already exists.
+    {
+        $field = array(
+            'field_name'    => $myField_name,
+            'type'          => 'list_text',
+			'weight'          => 10,
+			'settings'	=> array(
+     	 	'allowed_values' => array('Not Permitted' => 'Not Permitted', 'With Approval' => 'With Approval', 'Permitted' => 'Permitted'),
+    ));
+        field_create_field($field);
+
+        $field_instance = array(
+            'field_name'    => $myField_name,
+			'label' => $service,
+			'title' => $service,
+            'entity_type'   => 'node',
+			'default_value' => '',
+            'bundle'        => 'sensitive_data',
+            //'label'         => t('Select an image'),
+            'description'   => t(''),
+            'widget'        => array(
+                'type'      => 'options_buttons',
+                'weight'    => 10,
+            ),
+			'properties' => array( 
+				'filter_xss' => 1,
+				'strip_tags' => '',
+				'empty_option' => '', 
+				'optgroups' => ''
+			), 			
+			"value_key" => "value",
+        );
+        field_create_instance($field_instance);
+		
+		
+		//add new fields to the Service Applicability Field Group
+		$groups = field_group_read_groups(array(
+			'name' => 'node',
+			'bundle' => 'sensitive_data',
+			'view_mode' => 'full'));
+		
+		if ($groups['node']['sensitive_data']['form']['group_data_service_applicability']) {
+			$your_group = $groups['node']['sensitive_data']['form']['group_data_service_applicability'];
+			$your_group->children[] = $myField_name;
+			field_group_group_save($your_group);		
+		}
+		else {drupal_set_message("Group error!!");}
+        //drupal_set_message("Fields created successfully!");
+    }
+}
+
+
+function dataguide_hooks_reorder_services_group() {
+	watchdog('Reorder log', "Yes the reorder was triggered.", array(), WATCHDOG_DEBUG);	
+//sort the fields within the parent Field Group...
+		$kids = array();
+$groups = field_group_read_groups(array(
+			'name' => 'node',
+			'bundle' => 'sensitive_data',
+			'view_mode' => 'full'));
+
+
+
+		if (isset($groups['node']['sensitive_data']['form']['group_data_service_applicability'])) {
+
+			foreach ($groups['node']['sensitive_data']['form']['group_data_service_applicability']->children as $kid) {
+				
+				if (field_info_field($kid) != NULL) {
+				//array_push($kids, $kid);
+				$thisnid = str_replace("prog_","",$kid);
+				
+				$lookup = node_load($thisnid);
+				$title = $lookup->title;
+				$kids[$title] = $thisnid;
+			}}}
+else {echo "not set";}
+
+uksort($kids, 'strcasecmp');
+$w = 0;
+foreach ($kids as $key=>$value) {
+echo "$key : $value <br />";
+if ($instance = field_info_instance('node', "prog_".$value, 'sensitive_data')) {
+
+$instance['widget']['weight'] = $w;
+
+if (field_update_instance($instance)) {
+echo "updated<br />";
+}
+
+else {echo "can't update<br />";}
+}
+$w++;
+
+
+}
+		
+}
