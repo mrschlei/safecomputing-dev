@@ -11,6 +11,11 @@ ln -sf /scd-secret/apache2.conf /etc/apache2/apache2.conf
 ln -sf /scd-secret/ports.conf /etc/apache2/ports.conf
 ln -sf /scd-secret/app/settings.php /var/www/html/sites/default/settings.php
 
+if [ -f /secrets/app/local.start.sh ]
+then
+  /bin/sh /secrets/app/local.start.sh
+fi
+
 #ln -s /var/www/html/ /var/www/html/dataguide
 #mkdir /var/www/html/sites/safecomputing-dev.openshift.dsc.umich.edu.dataguide
 #ln -s /scd-secret/dataguide-settings.php \
@@ -24,6 +29,7 @@ ln -sf /scd-secret/AddTrustExternalCARoot.pem /etc/ssl/certs/AddTrustExternalCAR
 ln -sf /scd-secret/sha384-Intermediate-cert.pem /etc/ssl/certs/sha384-Intermediate-cert.pem
 #ln -sf /scd-secret/safecomputing-dev.openshift.dsc.umich.edu.cert /etc/ssl/certs/safecomputing-dev.openshift.dsc.umich.edu.cert
 #ln -sf /scd-secret/safecomputing-dev.openshift.dsc.umich.edu.key /etc/ssl/private/safecomputing-dev.openshift.dsc.umich.edu.key
+
 # Rehash command needs to be run before starting apache.
 c_rehash /etc/ssl/certs
 
