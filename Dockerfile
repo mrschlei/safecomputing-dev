@@ -5,7 +5,7 @@ FROM drupal:8.4.2
 ### Cosign Pre-requisites ###
 WORKDIR /usr/lib/apache2/modules
 
-ENV COSIGN_URL http://downloads.sourceforge.net/project/cosign/cosign/cosign-3.2.0/cosign-3.2.0.tar.gz
+ENV COSIGN_URL http://downloads.sourceforge.net/project/cosign/cosign/cosign3-4.0/cosign3-4.0.tar.gz
 ENV GIT_CLONE "git clone https://git.code.sf.net/p/cosign/code cosign-code"
 ENV CPPFLAGS="-I/usr/kerberos/include"
 ENV OPENSSL_VERSION 1.0.1t-1+deb8u7
@@ -17,8 +17,8 @@ RUN apt-get update \
 ### Build Cosign ###
 RUN wget "$COSIGN_URL" \
 	&& mkdir -p src/cosign \
-	&& tar -xvf cosign-3.2.0.tar.gz -C src/cosign --strip-components=1 \
-	&& rm cosign-3.2.0.tar.gz \
+	&& tar -xvf cosign3-4.0.tar.gz -C src/cosign --strip-components=1 \
+	&& rm cosign3-4.0.tar.gz \
 	&& cd src/cosign \
 	&& ./configure --enable-apache2=/usr/bin/apxs \
 	&& sed -i 's/remote_ip/client_ip/g' ./filters/apache2/mod_cosign.c \
