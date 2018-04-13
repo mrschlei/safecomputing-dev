@@ -1,6 +1,6 @@
-FROM drupal:7.56-apache
+FROM drupal:7.58-apache
 
-#MAINTAINER: Ben Fairfield - benfa
+#MAINTAINER: 
 
 #### Cosign Pre-requisites ###
 WORKDIR /usr/lib/apache2/modules
@@ -13,7 +13,7 @@ ENV APACHE2=/usr/sbin/apache2
 # install PHP and Apache2 here
 RUN apt-get update \
 	&& apt-get install -y wget gcc make openssl \
-		libssl-dev=$OPENSSL_VERSION apache2-dev autoconf
+		libssl-dev apache2-dev autoconf net-tools
 
 ### Build Cosign ###
 RUN wget "$COSIGN_URL" \
@@ -30,15 +30,32 @@ RUN wget "$COSIGN_URL" \
 	&& mkdir -p /var/cosign/filter \
 	&& chmod 777 /var/cosign/filter
 
-#WORKDIR /etc/apache2
-
 ### Remove pre-reqs ###
 RUN apt-get remove -y make wget autoconf \
 	&& apt-get autoremove -y
 
-EXPOSE 443
+# Section that sets up Apache and Cosign to run as non-root user.
+EXPOSE 8080
+EXPOSE 8443
 
+# nothing here for the time being.
 COPY . /var/www/html/
+
+### There may be an easier way to do all of this by setting APACHE_RUN_USER
+### and APACHE_RUN_GROUP in env vars or /etc/apache2/envvars
+
+### change directory owner, as openshift user is in root group.
+RUN chown -R root:root /var/www/html /var/log/apache2 /var/lock/apache2 \
+	/var/run/apache2 /run/lock
+
+### Modify perms for the openshift user, who is not root, but part of root group.
+RUN chmod -R g+r /var/www/html /var/cosign 
+RUN chmod -R g+rw /var/log/apache2 /var/www/html/sites/default /etc/apache2 \
+	/etc/ssl/certs /etc/ssl/private /etc/apache2/mods-enabled /etc/apache2/sites-enabled \
+	/etc/apache2/sites-available /etc/apache2/mods-available \
+	/var/lib/apache2/module/enabled_by_admin /var/lib/apache2/site/enabled_by_admin \
+	/var/lock/apache2 /var/run/apache2
+RUN chmod g+rwx /etc/ssl/private
 
 ### Start script incorporates config files and sends logs to stdout ###
 COPY start.sh /usr/local/bin
