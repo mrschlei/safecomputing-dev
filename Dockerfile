@@ -3,8 +3,8 @@ FROM drupal7-cosign:latest
 COPY . /var/www/html/
 
 ### change directory owner, as openshift user is in root group.
-###RUN chown -R root:root /var/www/html /var/log/apache2 /var/lock/apache2 \
-###	/var/run/apache2 /usr/local/etc/php /usr/local/lib/php
+RUN chown -R root:root /var/www/html /var/log/apache2 /var/lock/apache2 \
+	/var/run/apache2 /usr/local/etc/php /usr/local/lib/php
 
 ### Modify perms for the openshift user, who is not root, but part of root group.
 RUN chmod -R g+rw /var/log/apache2 /var/www/html /etc/apache2 \
